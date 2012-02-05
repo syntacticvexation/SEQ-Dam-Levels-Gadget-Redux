@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<gadget>
+    <name>SEQ Dam Levels</name>
+    <namespace>SEQ.Water</namespace>
+    <version>1.1</version>
+    <description>Dam level information for South East Queensland.</description>
+    <icons>
+        <icon height="119" width="126" src="icon.png" />
+    </icons>
+    <hosts>
+        <host name="sidebar">
+            <base type="HTML" apiVersion="1.0.0" src="SEQWater.html" />
+            <permissions>full</permissions>
+            <platform minPlatformVersion="0.3" />
+        </host>
+    </hosts>
+</gadget>
