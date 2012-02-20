@@ -128,7 +128,7 @@ function extractDataFromHTML(htmldoc) {
 	SEQWater.lastUpdated = $(htmldoc).find('.TableDataAllDams').find('h2').first().text();
 	SEQWater.rateOfConsumption = 686000000.0;
 	
-	SEQWater.total = new Dam('Totals', "-", $(htmldoc).find('#dam30Max').text().replace(/,/g,''), "0", $(htmldoc).find('#dam30Vol').text().replace(/,/g,''), $(htmldoc).find('#dam30Per').text().replace(/,/g,''), "0.000", "0");
+	SEQWater.total = new Dam('Totals', "-", $(htmldoc).find('#dam190Max').text().replace(/,/g,''), "0", $(htmldoc).find('#dam190Vol').text().replace(/,/g,''), $(htmldoc).find('#dam190Per').text().replace(/,/g,''), "0.000", "0");
 	return [dams['Wivenhoe'], dams['North Pine'], dams['Somerset']];
 }
 
