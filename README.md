@@ -4,7 +4,7 @@ README
 To use
 ------
 
-See Downloads to download gadget file. 
+See https://docs.google.com/open?id=0B4xYGxUNQi1DOFFEODJRa1YwVGc to download gadget file. 
 
 To build
 --------
