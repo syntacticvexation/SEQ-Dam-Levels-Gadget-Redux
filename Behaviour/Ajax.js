@@ -4,7 +4,7 @@ SEQWater.BROWSER_MODE = false;
  // Make an ajax call to the web server (too many comments)
  function PerformAjaxCall(dataManager) 
  {
- 	$.get('http://www.seqwater.com.au/public/dam-levels',function(doc) {
+ 	$.get('http://www.previous.seqwater.com.au/public/dam-levels',function(doc) {
 		// Extract the info from the xml and create javascript Dam objects.
 		var dams = ExtractDamObjectsFromDataSource(doc);
 		RenderDams(dams);
