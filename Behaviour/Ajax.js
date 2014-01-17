@@ -4,7 +4,7 @@ SEQWater.BROWSER_MODE = false;
  // Make an ajax call to the web server (too many comments)
  function PerformAjaxCall(dataManager) 
  {
- 	$.get('http://www.previous.seqwater.com.au/public/dam-levels',function(doc) {
+ 	$.get('http://www.seqwater.com.au/water-supply/dam-levels',function(doc) {
 		// Extract the info from the xml and create javascript Dam objects.
 		var dams = ExtractDamObjectsFromDataSource(doc);
 		RenderDams(dams);
@@ -24,7 +24,7 @@ SEQWater.BROWSER_MODE = false;
  
 function getLastUpdateText() {
 	// Show the time the the info was last correct at
-	var lastUpdate = new Date(SEQWater.lastUpdated * 1);
+	var lastUpdate = new Date(SEQWater.lastUpdated);
 	var dateString = lastUpdate.toLocaleDateString();
 	return dateString.substring(dateString.indexOf(',') + 2, dateString.length);
 }
@@ -97,37 +97,48 @@ function dummyData() {
 }
 
 function extractDataFromHTML(htmldoc) {
+	if (htmldoc.responseText) {
+		htmldoc = htmldoc.responseText;
+	}
+
+	var extractParams = function(dom) {
+		var dam_params = [];
+		$(dom).find('td').each(function(){ dam_params[this.id] = $(this).find('p').text().replace(/,/g,'');});
+
+		return dam_params;
+	}
+
 	var dams = [];
 	
 	$(htmldoc).find('.TableDataAllDams:last').find('tbody').find('tr').each(function(i) {
-		var dam_name_tag = $(this).find('td').first();
-		
-		dam_name_tag.text().match(/(.+) Dam/);
+		var dam_id_tag = $(this).find('td').first();
+		dam_id_tag.attr('id').match(/dam(\d+)Nam/);
+		var dam_id = RegExp.$1;
+
+		dam_params = extractParams(this);
+
+		dam_params['dam'+dam_id+'Nam'].match(/(.+) [dD]am/);
 		var dam_name = RegExp.$1;
-
-		dam_name_tag.attr('id').match(/dam(\d+)Nam/);
-		var dam_id = RegExp.$1;				
-
+		
 		dams[dam_name] = new Dam(
 					dam_name,
 					-1,
-					$(htmldoc).find('#dam'+dam_id+'Max').text().replace(/,/g,''),
+					dam_params['dam'+dam_id+'Max'],
 					"0",
-					$(htmldoc).find('#dam'+dam_id+'Vol').text().replace(/,/g,''),
-					$(htmldoc).find('#dam'+dam_id+'Per').text().replace(',',''),
+					dam_params['dam'+dam_id+'Vol'],
+					dam_params['dam'+dam_id+'Per'],
 					"0.0000",
 					0
-				);
-				
+				);	
 	});
-	
+
 	dams['Wivenhoe'].fullSupplyLevel = 67;
 	dams['North Pine'].fullSupplyLevel = 39.63;
 	dams['Somerset'].fullSupplyLevel = 99;
 
-	SEQWater.lastUpdated = $(htmldoc).find('.TableDataAllDams').find('h2').first().text();
+	SEQWater.lastUpdated = $(htmldoc).find('.TableDataAllDams').find('th').first().text();
 	SEQWater.rateOfConsumption = 686000000.0;
-	
+
 	SEQWater.total = new Dam('Totals', "-", $(htmldoc).find('#dam190Max').text().replace(/,/g,''), "0", $(htmldoc).find('#dam190Vol').text().replace(/,/g,''), $(htmldoc).find('#dam190Per').text().replace(/,/g,''), "0.000", "0");
 	return [dams['Wivenhoe'], dams['North Pine'], dams['Somerset']];
 }
@@ -170,6 +181,5 @@ function extractDataFromXml(xmldoc) {
 // and create an array of Dams
 function ExtractDamObjectsFromDataSource(doc)
 {
-	if (SEQWater.BROWSER_MODE) return dummyData();
 	if (doc != null) return extractDataFromHTML(doc);
 }

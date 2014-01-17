@@ -1,5 +1,5 @@
 SEQWater.widget = SEQWater.BROWSER_MODE ? getFakeWidget() : getRealWidget();
-SEQWater.dataManager = SEQWater.BROWSER_MODE ? getFakeDataManager() : getXmlDataManager();
+SEQWater.dataManager =  SEQWater.BROWSER_MODE ? getFakeDataManager() : getXmlDataManager();
 
 function getDamInfo() {
 	// If the program has previously run then the data will be already persisted. Use
@@ -20,8 +20,8 @@ function Init()
 	SEQWater.widget.setBackground();
 	$("#WaitDiv").css('display',"inline");
 	
-	
 	var dams = getDamInfo();
+
 	if (dams) {
 		// Display the dam info to the browser
 		RenderDams(dams);
@@ -75,8 +75,7 @@ function UpdateRemaining()
 	if (SEQWater.total != null)
 	{
 		var currentTime = new Date().getTime();
-
-		var totalRemaining = (SEQWater.total.stored * 1000000) - (((currentTime - SEQWater.lastUpdated) / (1000 * 60 * 60 * 24)) * SEQWater.rateOfConsumption);
+		var totalRemaining = (SEQWater.total.stored * 1000000) - (((currentTime - new Date(SEQWater.lastUpdated).getTime()) / (1000 * 60 * 60 * 24)) * SEQWater.rateOfConsumption);
 
 		$("#Remaining").text(AddSeps(totalRemaining.toFixed(0)));
 	}
