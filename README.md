@@ -1,5 +1,8 @@
-README
+README - NO LONGER SUPPORTED
 ======
+
+This gadget is no longer supported as Windows Gadgets have been discontinued by Microsoft and SEQWater Dam data is not accessible via YQL.
+
 
 To use
 ------
